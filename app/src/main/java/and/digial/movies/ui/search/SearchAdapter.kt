@@ -13,6 +13,7 @@ import com.squareup.picasso.Picasso
 class SearchAdapter: RecyclerView.Adapter<MovieResultViewHolder>() {
 
     var items: List<MovieResult> = emptyList()
+    var clickListener: ((movieResult: MovieResult) -> Unit)? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MovieResultViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.item_movie, parent, false)
@@ -20,7 +21,7 @@ class SearchAdapter: RecyclerView.Adapter<MovieResultViewHolder>() {
     }
 
     override fun onBindViewHolder(holder: MovieResultViewHolder, position: Int) {
-        holder.bind(items[position])
+        holder.bind(items[position], clickListener)
     }
 
     override fun getItemCount(): Int = items.size
@@ -33,12 +34,16 @@ class MovieResultViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) 
     var title: MaterialTextView = itemView.findViewById(R.id.result_title)
     var imageView: ImageView = itemView.findViewById(R.id.result_image)
 
-    fun bind(movieResult: MovieResult) {
+    fun bind(movieResult: MovieResult, clickListener: ((movieResult: MovieResult) -> Unit)?) {
         title.text = movieResult.title
 
         Picasso.get()
             .load("$IMAGE_BASE_URL/${movieResult.backdropPath}")
             .error(R.drawable.ic_baseline_broken_image_24)
             .into(imageView)
+
+        itemView.setOnClickListener {
+            clickListener?.invoke(movieResult)
+        }
     }
 }

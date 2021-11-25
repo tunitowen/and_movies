@@ -1,5 +1,6 @@
 package and.digial.movies.di
 
+import and.digial.movies.ui.rabbit.RabbitViewModel
 import and.digial.movies.ui.search.SearchViewModel
 import and.digial.network.MoviesApi
 import and.digial.network.MoviesRepo
@@ -11,6 +12,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 val appModule = module {
     viewModel { SearchViewModel(get()) }
+    viewModel { RabbitViewModel(get()) }
 
     single { MoviesRepo(get()) }
 

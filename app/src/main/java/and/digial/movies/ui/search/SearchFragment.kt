@@ -11,6 +11,7 @@ import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.textfield.TextInputEditText
@@ -44,6 +45,10 @@ class SearchFragment : Fragment() {
 
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
         recyclerView.adapter = adapter
+
+        adapter.clickListener = { result ->
+            findNavController().navigate(SearchFragmentDirections.searchToRabbit(result.title, result.id))
+        }
 
         textInputLayout.setEndIconOnClickListener {
             searchAndHideKeyboard(textInputLayout.editText?.text.toString())

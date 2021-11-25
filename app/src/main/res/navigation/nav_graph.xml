@@ -10,12 +10,35 @@
         android:name="and.digial.movies.ui.intro.IntroFragment"
         tools:layout="@layout/fragment_intro">
 
-        <action android:id="@+id/intro_to_search"
-            app:destination="@id/search_fragment"/>
+        <action
+            android:id="@+id/intro_to_search"
+            app:destination="@id/search_fragment" />
 
     </fragment>
 
-    <fragment android:id="@+id/search_fragment"
+    <fragment
+        android:id="@+id/search_fragment"
         android:name="and.digial.movies.ui.search.SearchFragment"
-        tools:layout="@layout/fragment_search"/>
+        tools:layout="@layout/fragment_search">
+
+        <action android:id="@+id/search_to_rabbit"
+            app:destination="@id/rabbit_fragment"/>
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/rabbit_fragment"
+        android:name="and.digial.movies.ui.rabbit.RabbitFragment"
+        tools:layout="@layout/fragment_rabbit">
+
+        <argument
+            android:name="movie_title"
+            app:argType="string"
+            app:nullable="false" />
+        <argument
+            android:name="movie_id"
+            app:argType="integer"
+            app:nullable="false" />
+
+    </fragment>
 </navigation>
