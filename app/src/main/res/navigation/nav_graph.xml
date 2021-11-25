@@ -10,5 +10,12 @@
         android:name="and.digial.movies.ui.intro.IntroFragment"
         tools:layout="@layout/fragment_intro">
 
+        <action android:id="@+id/intro_to_search"
+            app:destination="@id/search_fragment"/>
+
     </fragment>
+
+    <fragment android:id="@+id/search_fragment"
+        android:name="and.digial.movies.ui.search.SearchFragment"
+        tools:layout="@layout/fragment_search"/>
 </navigation>
