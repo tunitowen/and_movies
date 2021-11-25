@@ -30,8 +30,11 @@ class SearchFragment: Fragment() {
         super.onStart()
 
         textInputLayout.setEndIconOnClickListener {
-            Toast.makeText(requireContext(), "Searching", Toast.LENGTH_SHORT).show()
             viewModel.search(textInputLayout.editText?.text.toString())
         }
+
+        viewModel.searchResult.observe(this, { result ->
+            Toast.makeText(requireContext(), "Got a Search Result", Toast.LENGTH_SHORT).show()
+        })
     }
 }
