@@ -1,22 +1,29 @@
 package and.digial.movies.ui.search
 
 import and.digial.movies.R
+import android.app.Activity
 import android.os.Bundle
+import android.view.KeyEvent.KEYCODE_ENTER
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.EditorInfo
+import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class SearchFragment: Fragment() {
+
+class SearchFragment : Fragment() {
 
     private val viewModel: SearchViewModel by viewModel()
 
     lateinit var textInputLayout: TextInputLayout
+    lateinit var editText: TextInputEditText
     lateinit var recyclerView: RecyclerView
     private val adapter = SearchAdapter()
 
@@ -28,6 +35,7 @@ class SearchFragment: Fragment() {
         val view = inflater.inflate(R.layout.fragment_search, container, false)
         textInputLayout = view.findViewById(R.id.search_text_input_layout)
         recyclerView = view.findViewById(R.id.search_recycler_view)
+        editText = view.findViewById(R.id.search_text_input_edit_text)
         return view
     }
 
@@ -38,7 +46,14 @@ class SearchFragment: Fragment() {
         recyclerView.adapter = adapter
 
         textInputLayout.setEndIconOnClickListener {
-            viewModel.search(textInputLayout.editText?.text.toString())
+            searchAndHideKeyboard(textInputLayout.editText?.text.toString())
+        }
+        editText.setOnEditorActionListener { textView, actionId, keyEvent ->
+            if (actionId == EditorInfo.IME_ACTION_SEARCH || keyEvent.keyCode == KEYCODE_ENTER) {
+                searchAndHideKeyboard(editText.text.toString())
+                true
+            }
+            false
         }
 
         viewModel.searchResult.observe(this, { result ->
@@ -46,5 +61,11 @@ class SearchFragment: Fragment() {
             adapter.items = result.results
             adapter.notifyDataSetChanged()
         })
+    }
+
+    private fun searchAndHideKeyboard(term: String) {
+        viewModel.search(term)
+        val inputMethodManager = requireContext().getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
+        inputMethodManager.hideSoftInputFromWindow(editText.windowToken, 0)
     }
 }
